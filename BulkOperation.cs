@@ -59,8 +59,8 @@ namespace BulkOperations
         private static void ConfigureOptions(this SqlBulkCopy bulk)
         {
             bulk.EnableStreaming = true;
-            bulk.BatchSize       = 10000;
-            bulk.NotifyAfter     = 1000;
+            bulk.BatchSize       = 10_000;
+            bulk.NotifyAfter     =  1_000;
         }
 
         private static void ConfigureLog(this SqlBulkCopy bulk)
