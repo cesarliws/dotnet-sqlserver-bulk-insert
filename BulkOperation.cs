@@ -14,6 +14,7 @@ namespace BulkOperations
      * https://github.com/mgravell/fast-member
      *
      * Update if exist https://stackoverflow.com/questions/12521692/c-sharp-bulk-insert-sqlbulkcopy-update-if-exists/12535726
+     * https://stackoverflow.com/questions/33027246/insert-object-or-update-if-it-already-exists-using-bulkcopy-c-sql
      * https://www.databasejournal.com/features/mssql/article.php/3739131/UPSERT-Functionality-in-SQL-Server-2008.htm
      * https://stackoverflow.com/questions/4889123/any-way-to-sqlbulkcopy-insert-or-update-if-exists
      */
@@ -50,9 +51,9 @@ namespace BulkOperations
         {
             // https://stackoverflow.com/questions/40470357/importing-a-csv-using-sqlbulkcopy-with-asp-net-core
             bulk.DestinationTableName = "Customer";
-            bulk.ColumnMappings.Add(nameof(Customer.Id), "Id");
-            bulk.ColumnMappings.Add(nameof(Customer.FirstName), "FirstName");
-            bulk.ColumnMappings.Add(nameof(Customer.LastName), "LastName");
+            bulk.ColumnMappings.Add(nameof(Customer.Id), "Id"  );
+            bulk.ColumnMappings.Add(nameof(Customer.FirstName  ), "FirstName");
+            bulk.ColumnMappings.Add(nameof(Customer.LastName   ), "LastName");
             bulk.ColumnMappings.Add(nameof(Customer.DateOfBirth), "DateOfBirth");
         }
 
