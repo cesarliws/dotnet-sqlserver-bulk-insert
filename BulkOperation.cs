@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -7,6 +8,20 @@ namespace BulkOperations
 {
     public static class BulkOperation
     {
+        public static void Run()
+        {
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+
+            ConsoleLog.Write("Início processamento");
+
+            BulkOperation.InsertAsync().Wait();
+
+            stopwatch.Stop();
+
+            ConsoleLog.Write($"Processamento concluído em {stopwatch.ElapsedTimeFmt()}");
+        }
+
         public static async Task InsertAsync(CancellationToken cancellationToken = default(CancellationToken))
         {
             using (var connection = new SqlConnection())

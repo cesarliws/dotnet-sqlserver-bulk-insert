@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 
 namespace BulkOperations
 {
@@ -7,21 +6,23 @@ namespace BulkOperations
     {
         private static void Main(string[] args)
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
+            //Console.WriteLine("BUG");
+            //StateMachineBug.Run();
 
-            ConsoleLog.Write("Início processamento");
+            //Console.WriteLine("\nMEMBER");
+            //StateMachineMember.Run();
 
-            BulkOperation.InsertAsync().Wait();
+            //Console.WriteLine("\nON/OFF");
+            //StateMachineOnOff.Run();
 
-            stopwatch.Stop();
+            //Console.WriteLine("\nPHONE CALL");
+            //StateMachinePhoneCall.Run();
 
-
-            ConsoleLog.Write($"Processamento concluído em {stopwatch.ElapsedTimeFmt()}");
+            BulkOperation.Run();
 
             Console.WriteLine("");
             Console.WriteLine("Tecle <ENTER> para finalizar...");
-            Console.ReadLine();
+            Console.ReadKey(false);
         }
     }
 }
