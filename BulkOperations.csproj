@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="BulkOperation.cs" />
     <Compile Include="BulkUpdate.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="ConsoleLog.cs" />
     <Compile Include="Customer.cs" />
     <Compile Include="DataTableExtension.cs" />
     <Compile Include="ObjectDataReader.cs" />

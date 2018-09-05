@@ -21,20 +21,22 @@
 */
 
 /*
-use [Database]
-go
 
-merge into {Employee} as Target
-using {#EmployeeTemp} as Source
-   on Target.id = Source.id
+    use [Database];
+    go;
 
-when matched then
-    update set 
-      Target.name   = Source.name,
-      Target.Salary = Source.Salary
+    merge into {Employee} as Target
+    using {#EmployeeTemp} as Source
+       on Target.id = Source.id
 
-when not matched then
-    insert (id, name, salary) 
-    values (Source.id, Source.name, Source.Salary);
+    when matched then
+        update set 
+          Target.name   = Source.name,
+          Target.Salary = Source.Salary
+
+    when not matched then
+        insert (id, name, salary) 
+        values (Source.id, Source.name, Source.Salary)
+;
 
 */
