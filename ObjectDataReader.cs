@@ -41,7 +41,7 @@ namespace BulkOperations
                 var parameterExpression = Expression.Parameter(typeof(T), "x");
                 var func = (Func<T, object>)Expression.Lambda(
                     Expression.Convert(
-                        Expression.Property(parameterExpression, propertyName), 
+                        Expression.Property(parameterExpression, propertyName),
                         typeof(object)),
                         parameterExpression)
                     .Compile();
@@ -73,7 +73,6 @@ namespace BulkOperations
             var func = _getPropertyValueFuncs[ordinal];
             return func(_iterator.Current);
         }
-
 
         // optional
         public override int GetValues(object[] values)

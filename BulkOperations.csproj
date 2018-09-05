@@ -34,6 +34,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -44,11 +45,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BulkOperation.cs" />
+    <Compile Include="BulkUpdate.cs" />
+    <Compile Include="Log.cs" />
     <Compile Include="Customer.cs" />
+    <Compile Include="DataTableExtension.cs" />
     <Compile Include="ObjectDataReader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqlConnectionExtension.cs" />
     <Compile Include="StopwatchExtension.cs" />
+    <Compile Include="Todo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

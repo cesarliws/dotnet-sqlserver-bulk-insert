@@ -3,20 +3,21 @@ using System.Diagnostics;
 
 namespace BulkOperations
 {
-    static class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Console.WriteLine($"{DateTime.Now} Início processamento");
+            Log.Write("Início processamento");
 
             BulkOperation.InsertAsync().Wait();
 
             stopwatch.Stop();
 
-            Console.WriteLine($"{DateTime.Now} Processamento concluído em {stopwatch.ElapsedTimeFmt()}");
+
+            Log.Write($"Processamento concluído em {stopwatch.ElapsedTimeFmt()}");
 
             Console.WriteLine("");
             Console.WriteLine("Tecle <ENTER> para finalizar...");

@@ -5,10 +5,10 @@ using System.Collections.Generic;
     use Insumos;
 
     create table Customer (
-	    Id uniqueidentifier primary key,
-	    FirstName varchar(100),
-	    LastName varchar(100),
-	    DateOfBirth date,
+        Id uniqueidentifier primary key,
+        FirstName varchar(100),
+        LastName varchar(100),
+        DateOfBirth date,
         CreatedAt  datetime2 default getdate()
     );
 
