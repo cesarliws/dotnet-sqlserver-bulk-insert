@@ -15,10 +15,10 @@ namespace BulkOperations
                 await connection.OpenAsync(cancellationToken).ConfigureAwait(true);
 
                 const int recordsToGenerate = 100_000;
-                Log.Write($"Gerando {recordsToGenerate:n0} registros clientes");
+                ConsoleLog.Write($"Gerando {recordsToGenerate:n0} registros clientes");
                 var customers = Customer.Generate(recordsToGenerate);
 
-                Log.Write("Inserindo registros no banco de dados");
+                ConsoleLog.Write("Inserindo registros no banco de dados");
                 using (var insertBulk = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, null))
                 {
                     using (var customerReader = new ObjectDataReader<Customer>(customers.GetEnumerator()))
@@ -33,26 +33,26 @@ namespace BulkOperations
                 {
                     try
                     {
-                        Log.Write("Criando tabela temporária e copiando registros");
+                        ConsoleLog.Write("Criando tabela temporária e copiando registros");
                         command.CommandText = BulkUpdate.CreateTempTable;
                         command.ExecuteNonQuery();
                         try
                         {
-                            Log.Write("Atualizando registros: Tabela temporária -> Customers");
+                            ConsoleLog.Write("Atualizando registros: Tabela temporária -> Customers");
                             command.CommandTimeout = 300;
                             command.CommandText = BulkUpdate.UpdateTable;
                             command.ExecuteNonQuery();
                         }
                         finally
                         {
-                            Log.Write("Excluindo tabela temporária");
+                            ConsoleLog.Write("Excluindo tabela temporária");
                             command.CommandText = BulkUpdate.DropTempTable;
                             command.ExecuteNonQuery();
                         }
                     }
                     catch (Exception e)
                     {
-                        Log.Write(e.Message);
+                        ConsoleLog.Write(e.Message);
                     }
                 }
             }
@@ -77,13 +77,13 @@ namespace BulkOperations
         private static void ConfigureOptions(this SqlBulkCopy bulk)
         {
             bulk.EnableStreaming = true;
-            bulk.BatchSize = 10_000;
-            bulk.NotifyAfter = 1_000;
+            bulk.BatchSize   = 10_000;
+            bulk.NotifyAfter =  1_000;
         }
 
         private static void ConfigureLog(this SqlBulkCopy bulk)
         {
-            bulk.SqlRowsCopied += (sender, e) => Log.Write($"{DateTime.Now} RowsCopied: {e.RowsCopied:n0}");
+            bulk.SqlRowsCopied += (sender, e) => ConsoleLog.Write($"{DateTime.Now} RowsCopied: {e.RowsCopied:n0}");
         }
     }
 }

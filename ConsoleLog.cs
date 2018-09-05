@@ -2,7 +2,7 @@
 
 namespace BulkOperations
 {
-    public static class Log
+    public static class ConsoleLog
     {
         public static void Write(string value)
         {

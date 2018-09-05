@@ -16,9 +16,9 @@ namespace BulkOperations
     public class ObjectDataReader<T> : DbDataReader
     {
         private readonly IEnumerator<T> _iterator;
-        private readonly IDictionary<string, int> _propertyNameToOrdinal = new Dictionary<string, int>();
-        private readonly IDictionary<int, string> _ordinalToPropertyName = new Dictionary<int, string>();
-        private Func<T, object>[] _getPropertyValueFuncs;
+        private readonly IDictionary<string, int> _propToOrdinalTable = new Dictionary<string, int>();
+        private readonly IDictionary<int, string> _ordinalToPropTable = new Dictionary<int, string>();
+        private Func<T, object>[] _getPropValueFunc;
 
         public ObjectDataReader(IEnumerator<T> items)
         {
@@ -29,14 +29,14 @@ namespace BulkOperations
         private void Initialize()
         {
             var properties = typeof(T).GetProperties();
-            _getPropertyValueFuncs = new Func<T, object>[properties.Length];
+            _getPropValueFunc = new Func<T, object>[properties.Length];
 
             var ordinal = 0;
             foreach (var property in properties)
             {
                 var propertyName = property.Name;
-                _propertyNameToOrdinal.Add(propertyName, ordinal);
-                _ordinalToPropertyName.Add(ordinal, propertyName);
+                _propToOrdinalTable.Add(propertyName, ordinal);
+                _ordinalToPropTable.Add(ordinal, propertyName);
 
                 var parameterExpression = Expression.Parameter(typeof(T), "x");
                 var func = (Func<T, object>)Expression.Lambda(
@@ -46,7 +46,7 @@ namespace BulkOperations
                         parameterExpression)
                     .Compile();
 
-                _getPropertyValueFuncs[ordinal] = func;
+                _getPropValueFunc[ordinal] = func;
 
                 ordinal++;
             }
@@ -60,7 +60,7 @@ namespace BulkOperations
 
         public override int GetOrdinal(string name)
         {
-            return (_propertyNameToOrdinal.TryGetValue(name, out var ordinal)) ? ordinal : -1;
+            return (_propToOrdinalTable.TryGetValue(name, out var ordinal)) ? ordinal : -1;
         }
 
         public override bool IsDBNull(int ordinal)
@@ -70,11 +70,10 @@ namespace BulkOperations
 
         public override object GetValue(int ordinal)
         {
-            var func = _getPropertyValueFuncs[ordinal];
+            var func = _getPropValueFunc[ordinal];
             return func(_iterator.Current);
         }
 
-        // optional
         public override int GetValues(object[] values)
         {
             var max = Math.Min(values.Length, FieldCount);
@@ -92,13 +91,12 @@ namespace BulkOperations
 
         public override int Depth => 0;
 
-        public override int FieldCount => _ordinalToPropertyName.Count;
+        public override int FieldCount => _ordinalToPropTable.Count;
 
         public override bool HasRows => true;
 
         public override bool IsClosed => _iterator != null;
 
-        public override int RecordsAffected => throw new NotImplementedException();
 
         public override bool GetBoolean(int ordinal)
         {
@@ -110,24 +108,9 @@ namespace BulkOperations
             return (byte)GetValue(ordinal);
         }
 
-        public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
-        {
-            throw new NotImplementedException();
-        }
-
         public override char GetChar(int ordinal)
         {
             return (char)GetValue(ordinal);
-        }
-
-        public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override string GetDataTypeName(int ordinal)
-        {
-            throw new NotImplementedException();
         }
 
         public override DateTime GetDateTime(int ordinal)
@@ -143,11 +126,6 @@ namespace BulkOperations
         public override double GetDouble(int ordinal)
         {
             return (double)GetValue(ordinal);
-        }
-
-        public override IEnumerator GetEnumerator()
-        {
-            throw new NotImplementedException();
         }
 
         public override Type GetFieldType(int ordinal)
@@ -183,7 +161,7 @@ namespace BulkOperations
 
         public override string GetName(int ordinal)
         {
-            return _ordinalToPropertyName.TryGetValue(ordinal, out var name) ? name : null;
+            return _ordinalToPropTable.TryGetValue(ordinal, out var name) ? name : null;
         }
 
         public override string GetString(int ordinal)
@@ -195,5 +173,30 @@ namespace BulkOperations
         {
             return false;
         }
+
+        #region NotImplemented
+        public override int RecordsAffected => 
+            throw new NotImplementedException();
+
+        public override long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string GetDataTypeName(int ordinal)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IEnumerator GetEnumerator()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
     }
 }

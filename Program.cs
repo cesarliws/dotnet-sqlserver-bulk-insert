@@ -10,14 +10,14 @@ namespace BulkOperations
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            Log.Write("Início processamento");
+            ConsoleLog.Write("Início processamento");
 
             BulkOperation.InsertAsync().Wait();
 
             stopwatch.Stop();
 
 
-            Log.Write($"Processamento concluído em {stopwatch.ElapsedTimeFmt()}");
+            ConsoleLog.Write($"Processamento concluído em {stopwatch.ElapsedTimeFmt()}");
 
             Console.WriteLine("");
             Console.WriteLine("Tecle <ENTER> para finalizar...");
