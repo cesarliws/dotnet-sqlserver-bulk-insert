@@ -92,7 +92,7 @@ namespace BulkOperations
                 .OnExit(t => StopCallTimer())
                 .InternalTransition(Trigger.MuteMicrophone, t => OnMute())
                 .InternalTransition(Trigger.UnmuteMicrophone, t => OnUnmute())
-                .InternalTransition<int>(_setVolumeTrigger, (volume, t) => OnSetVolume(volume))
+                .InternalTransition(_setVolumeTrigger, (volume, t) => OnSetVolume(volume))
                 .Permit(Trigger.LeftMessage, State.OffHook)
                 .Permit(Trigger.PlacedOnHold, State.OnHold);
 

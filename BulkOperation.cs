@@ -12,17 +12,15 @@ namespace BulkOperations
         {
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-
             ConsoleLog.Write("Início processamento");
 
-            BulkOperation.InsertAsync().Wait();
+            InsertAsync().Wait();
 
             stopwatch.Stop();
-
             ConsoleLog.Write($"Processamento concluído em {stopwatch.ElapsedTimeFmt()}");
         }
 
-        public static async Task InsertAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public static async Task InsertAsync(CancellationToken cancellationToken = default(CancellationToken), SqlTransaction transaction = null)
         {
             using (var connection = new SqlConnection())
             {
@@ -34,7 +32,7 @@ namespace BulkOperations
                 var customers = Customer.Generate(recordsToGenerate);
 
                 ConsoleLog.Write("Inserindo registros no banco de dados");
-                using (var insertBulk = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, null))
+                using (var insertBulk = new SqlBulkCopy(connection, SqlBulkCopyOptions.Default, transaction))
                 {
                     using (var customerReader = new ObjectDataReader<Customer>(customers.GetEnumerator()))
                     {
@@ -92,8 +90,8 @@ namespace BulkOperations
         private static void ConfigureOptions(this SqlBulkCopy bulk)
         {
             bulk.EnableStreaming = true;
-            bulk.BatchSize   = 10_000;
-            bulk.NotifyAfter =  1_000;
+            bulk.BatchSize = 10_000;
+            bulk.NotifyAfter = 1_000;
         }
 
         private static void ConfigureLog(this SqlBulkCopy bulk)

@@ -58,7 +58,8 @@ namespace BulkOperations
             _machine = new StateMachine<State, Trigger>(State.Open);
 
             // Instantiate a new trigger with a parameter. 
-            _assignTrigger = _machine.SetTriggerParameters<string>(Trigger.Assign);
+            _assignTrigger = _machine
+                .SetTriggerParameters<string>(Trigger.Assign);
 
             // Configure the Open state
             _machine.Configure(State.Open)

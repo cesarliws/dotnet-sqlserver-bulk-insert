@@ -31,9 +31,9 @@ namespace BulkOperations
             {
                 yield return new Customer
                 {
-                    Id = Guid.NewGuid(),
-                    FirstName = "FirstName" + i,
-                    LastName = "LastName" + i,
+                    Id          = Guid.NewGuid(),
+                    FirstName   = "First Name " + i,
+                    LastName    = "Last Name "  + i,
                     DateOfBirth = DateTime.Now
                 };
             }

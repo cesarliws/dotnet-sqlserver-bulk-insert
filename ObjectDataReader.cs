@@ -15,14 +15,14 @@ namespace BulkOperations
     /// </summary>
     public class ObjectDataReader<T> : DbDataReader
     {
-        private readonly IEnumerator<T> _iterator;
+        private readonly IEnumerator<T> _items;
         private readonly IDictionary<string, int> _propToOrdinalTable = new Dictionary<string, int>();
         private readonly IDictionary<int, string> _ordinalToPropTable = new Dictionary<int, string>();
         private Func<T, object>[] _getPropValueFunc;
 
         public ObjectDataReader(IEnumerator<T> items)
         {
-            _iterator = items ?? throw new ArgumentNullException(nameof(items));
+            _items = items ?? throw new ArgumentNullException(nameof(items));
             Initialize();
         }
 
@@ -52,10 +52,9 @@ namespace BulkOperations
             }
         }
 
-        // required
         public override bool Read()
         {
-            return _iterator.MoveNext();
+            return _items.MoveNext();
         }
 
         public override int GetOrdinal(string name)
@@ -71,7 +70,7 @@ namespace BulkOperations
         public override object GetValue(int ordinal)
         {
             var func = _getPropValueFunc[ordinal];
-            return func(_iterator.Current);
+            return func(_items.Current);
         }
 
         public override int GetValues(object[] values)
@@ -95,7 +94,7 @@ namespace BulkOperations
 
         public override bool HasRows => true;
 
-        public override bool IsClosed => _iterator != null;
+        public override bool IsClosed => _items != null;
 
 
         public override bool GetBoolean(int ordinal)
